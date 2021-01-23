@@ -8,7 +8,7 @@ var circleMarkers = Array();
 var circlePoints = Array();
 var drivePolyPoints = Array();
 var searchPolygon, drivePolygon;
-var distToDrive = 5000*0.000621371192; // miles
+var distToDrive = 5000 * 0.000621371192; // miles
 var pointInterval = 30;
 var searchPoints = [];
 var polyline;
@@ -22,9 +22,45 @@ function initialize() {
         zoom: 9,
         mapTypeId: google.maps.MapTypeId.ROADMAP
     });
-    google.maps.event.addListener(map, "click", mapClick);
+    //google.maps.event.addListener(map, "click", mapClick);
 }
-google.maps.event.addDomListener(window, "load", initialize);
+//google.maps.event.addDomListener(window, "load", initialize);
+var autocompleteInput = document.getElementById("addressInput");
+var autocomplete = new google.maps.places.Autocomplete(autocompleteInput, {
+    types: ['address']
+});
+google.maps.event.addListener(autocomplete, 'place_changed', function () {
+    var place = autocomplete.getPlace();
+    //console.log(place);
+    autocompleteInput.value = place.formatted_address;
+    centerPoint = new google.maps.LatLng(place.geometry.location.lat(), place.geometry.location.lng());
+});
+
+var radiusInput = document.getElementById("radiusInput");
+var radiusLabel = document.getElementById("radiusLabel");
+function updateRadiusLabel() {
+    radiusLabel.innerHTML = `${radiusInput.value} ${radiusInput.value == 1 ? 'kilómetro' : 'kilómetros'}`
+    distToDrive = parseInt(radiusInput.value) * 1000 * 0.000621371192;
+}
+radiusInput.addEventListener("input", () => updateRadiusLabel());
+updateRadiusLabel();
+
+function loadMap() {
+    initialize();
+    document.getElementById("preMap").style.display = "none";
+    circleMarkers = Array();
+    centerMarker = new google.maps.Marker({
+        position: centerPoint,
+        map: map
+    });
+    centerMarker.setMap(map);
+    searchPoints = getCirclePoints(centerPoint, distToDrive);
+    drivePolyPoints = Array();
+    getDirections();
+}
+
+var goButton = document.getElementById("goButton");
+goButton.addEventListener("click", () => loadMap());
 
 function mapClick(evt) {
     // map.clearOverlays();
@@ -56,7 +92,7 @@ function getCirclePoints(center, radius) {
             var point = new google.maps.LatLng(parseFloat(y), parseFloat(x), true);
             bounds.extend(point);
             circlePoints.push(point);
-            if (a % 9 == 0) {
+            if (a % 10 == 0) {
                 searchPoints.push(point);
             }
         }

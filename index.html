@@ -5,18 +5,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Where Can I Go? - By NauCode</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Yusei+Magic&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="responsive.css">
 </head>
 
 <body>
     <div id="preMap">
-        <p>Hola</p>
+        <div class="wrapper">
+            <div class="container">
+                <div id="selectorTitle">
+                    <p>Where Can I Go?</p>
+                </div>
+                <div id="selectorStreet">
+                    <p>¿Desde dónde quieres ir?</p>
+                    <input type="text" name="test" id="addressInput">
+                </div>
+                <div>
+                    <p>¿A qué radio quieres ir (en kilómetros)?</p>
+                    <div id="selectorRadio">
+                        <input type="range" value="5" name="" min="1" max="40" id="radiusInput">
+                        <span id="radiusLabel">5 kilómetros</span>
+                    </div>
+                </div>
+                <div>
+                    <div id="goButton">
+                        <p>Mostrar en Mapa &rArr;</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <div id="map_canvas"></div>
 
     <script
-        src="https://maps.googleapis.com/maps/api/js?libraries=geometry&key=AIzaSyDelo8CkgThV6W5hA3pdm8ofEQ_p72CH7g"></script>
+        src="https://maps.googleapis.com/maps/api/js?libraries=geometry,places&key=AIzaSyDelo8CkgThV6W5hA3pdm8ofEQ_p72CH7g"></script>
     <script src="functions.js"></script>
 </body>
 
